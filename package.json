@@ -18,5 +18,8 @@
     "mongoose": "^6.0.12",
     "nodemailer": "^6.7.2",
     "uuid": "^8.3.2"
+  },
+  "engines": {
+    "node": "14.19.0"
   }
 }
