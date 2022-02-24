@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const allWordsSchema = new Schema({
-  words: Array,
-  translations: Array
+  word: String,
+  translation: String
 });
 
 module.exports = mongoose.model("allWordsSchema", allWordsSchema);
