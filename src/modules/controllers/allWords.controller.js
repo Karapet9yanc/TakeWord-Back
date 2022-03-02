@@ -7,13 +7,18 @@ const {
 
 module.exports.postAllWordsToDb = async (req, res) => {
     try {
-        const newAllWords = new AllWordsSchema({
-            words: allWordsArray,
-            translations: allTranslationsArray,
-        });
+        const saveAllWords = (words, translates) => {
+            return Promise.all(words.map(async (word, index) => {
+                const newWord = new AllWordsSchema({
+                    word,
+                    translation: translates[index]
+                })
 
-        await newAllWords
-            .save()
+                await newWord.save()
+            }))
+        }
+
+        await saveAllWords(allWordsArray, allTranslationsArray)
             .then(() => {
                 res.status(200).json({ message: 'all words are succesfully added to DB' })
             });
@@ -25,15 +30,11 @@ module.exports.postAllWordsToDb = async (req, res) => {
 module.exports.getRandomWord = async (req, res) => {
     try {
         const result = await AllWordsSchema.find();
-        const allWords = result[0];
-
-        const index = Math.floor(Math.random() * allWords.words.length);
-        const randomWord = allWords.words[index];
-        const randomTransl = allWords.translations[index];
+        const index = Math.floor(Math.random() * result.length);
 
         res.status(200).send({
-            words: randomWord,
-            translation: randomTransl,
+            word: result[index].word,
+            translation: result[index].translation,
         });
     } catch (e) {
         res.status(500).send({ message: '22' });
