@@ -17,7 +17,7 @@ try {
   res.status(500).send('Internal server error');
 }
 
-app.use(bodyParser());
+app.use(express.urlencoded());
 app.use(cors());
 app.use("/", apiRoutes);
 
