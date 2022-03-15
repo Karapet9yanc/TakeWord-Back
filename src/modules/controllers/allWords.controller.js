@@ -34,23 +34,47 @@ module.exports.postAllWordsToDb = async (req, res) => {
 
 module.exports.getRandomWord = async (req, res) => {
     try {
-        const userId = req.body.userId
-        const currentUser = await UserSchema.findById(userId)
-
         const result = await AllWordsSchema.find();
         const index = Math.floor(Math.random() * result.length);
         const token  = req.headers.authorization;
-
         
         let payload;
 
-        payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET, (err, decoded) => {
-            !err ? res.status(200).send({
-                     word: result[index].word,
-                     translation: result[index].translation,
-                     tokenRes: decoded
-                 }) :
-                 res.status(500).send(err)
+        payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
+            if(!err) {
+                const currentUser = await UserSchema.findById(decoded.userId)
+
+                const lastShowedWords = currentUser.showedWords.concat([{
+                    word: result[index].word,
+                    translation: result[index].translation,
+                    showedAt: new Date()
+                }])
+                console.log(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt)
+                // Временно поставил 10 секунд, в проде число надо будет заменить на 1000 * 60 * 60
+                if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt > 1000 * 60 * 60){
+                    UserSchema.findByIdAndUpdate(decoded.userId, {showedWords: lastShowedWords}).then(r => {
+
+                        res.status(200).send({
+                            word: result[index].word,
+                            translation: result[index].translation,
+                            tokenRes: decoded
+                            })
+                    }).catch(e => {
+                        res.status(404)
+                    })
+                } else {
+                    // res.status(200).send({
+                    //     word: lastShowedWords[lastShowedWords.length - 2].word,
+                    //     translation: lastShowedWords[lastShowedWords.length - 2].translation,
+                    //     tokenRes: decoded
+                    //     })
+                    res.status(405)
+                }
+
+                    
+            } else {
+                res.status(500).send(err)
+            }     
         });
     } catch (e) {
         res.status(500).send({ message: '22' });
