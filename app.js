@@ -18,7 +18,7 @@ try {
 }
 
 app.use(express.urlencoded());
-app.use(cors());
+// app.use(cors());
 app.use("/", apiRoutes);
 
 app.listen(process.env.PORT, () => {
