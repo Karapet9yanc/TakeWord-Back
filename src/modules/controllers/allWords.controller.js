@@ -49,7 +49,7 @@ module.exports.getRandomWord = async (req, res) => {
                     translation: result[index].translation,
                     showedAt: new Date()
                 }])
-                console.log(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt)
+
                 // Временно поставил 10 секунд, в проде число надо будет заменить на 1000 * 60 * 60
                 if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt > 1000 * 60 * 60){
                     UserSchema.findByIdAndUpdate(decoded.userId, {showedWords: lastShowedWords}).then(r => {
