@@ -38,3 +38,15 @@ module.exports.login = async (req, res) => {
     res.status(400).send({ message: e.message });
   }
 }
+
+
+module.exports.auth = async (req, res) => {
+  try {
+    const { user } = req
+    const token = await userService.auth(user)
+    
+    res.status(200).json(token)
+  } catch (e) {
+    res.status(400).send({ message: e.message });
+  }
+}

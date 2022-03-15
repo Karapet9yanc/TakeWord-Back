@@ -1,6 +1,8 @@
 const allWordsSchema = require('../../db/models/allWords-schema/index');
 const AllWordsSchema = require('../../db/models/allWords-schema/index');
-const ShownWordsSchema = require('../../db/models/shownWords-schema')
+const ShownWordsSchema = require('../../db/models/shownWords-schema');
+const UserSchema = require('../../db/models/user-schema')
+
 const {
     allTranslationsArray,
     allWordsArray
@@ -32,9 +34,13 @@ module.exports.postAllWordsToDb = async (req, res) => {
 
 module.exports.getRandomWord = async (req, res) => {
     try {
+        const userId = req.body.userId
+        const currentUser = await UserSchema.findById(userId)
+
         const result = await AllWordsSchema.find();
         const index = Math.floor(Math.random() * result.length);
         const token  = req.headers.authorization;
+
         
         let payload;
 
