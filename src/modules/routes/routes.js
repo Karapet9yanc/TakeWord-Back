@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const {verifyAccessToken} = require('../middlewares/verifyAccessToken.middleware')
 const {
     handleStudiedWord,
     postAllWordsToDb,
@@ -10,7 +10,8 @@ const {
 
 const {
     createNewUser,
-    login
+    login,
+    auth
 } = require('../controllers/user.controller')
 
 // words routes
@@ -25,6 +26,8 @@ router.post('/addNewWord', addNewWord)
 router.post('/register', createNewUser);
 
 router.post('/login', login)
+
+router.post('/auth', verifyAccessToken, auth)
 
 
 module.exports = router;

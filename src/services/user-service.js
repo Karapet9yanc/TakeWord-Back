@@ -118,6 +118,17 @@ class UserService {
             return {message: `User with login ${login} not found.`};
         }
     }
+    async auth(user){
+        const token = jwt.sign({
+            email: user.email,
+            userId: user._id
+        }, 
+        process.env.JWT_ACCESS_SECRET, 
+        {
+            expiresIn: '7d'
+        })
+        return { token: token } 
+    }
 }
 
 module.exports = new UserService();
