@@ -37,7 +37,8 @@ module.exports.getRandomWord = async (req, res) => {
         const result = await AllWordsSchema.find();
         const index = Math.floor(Math.random() * result.length);
         const token  = req.headers.authorization;
-        
+        res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
+
         let payload;
 
         payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
