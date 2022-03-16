@@ -52,7 +52,7 @@ module.exports.getRandomWord = async (req, res) => {
                 }])
 
                 // Временно поставил 10 секунд, в проде число надо будет заменить на 1000 * 60 * 60
-                if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt > 1000 * 30){
+                if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt > 1000 * 60 * 60){
                     UserSchema.findByIdAndUpdate(decoded.userId, {showedWords: lastShowedWords}).then(r => {
 
                         res.status(200).send({
@@ -69,7 +69,7 @@ module.exports.getRandomWord = async (req, res) => {
                     //     translation: lastShowedWords[lastShowedWords.length - 2].translation,
                     //     tokenRes: decoded
                     //     })
-                    if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt < 1000 * 10){
+                    if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt < 1000 * 60 * 10){
                         res.status(400).json({message: '1 hour has not yet expired', delay: lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt})
                     } else {
                         res.status(400).json({message: '1 hour has not yet expired'})
