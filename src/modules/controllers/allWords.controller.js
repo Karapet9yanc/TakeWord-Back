@@ -68,7 +68,7 @@ module.exports.getRandomWord = async (req, res) => {
                     //     translation: lastShowedWords[lastShowedWords.length - 2].translation,
                     //     tokenRes: decoded
                     //     })
-                    res.status(405)
+                    res.status(400).json({message: '1 hour has not yet expired'})
                 }
 
                     
