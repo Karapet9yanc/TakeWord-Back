@@ -38,7 +38,7 @@ module.exports.getRandomWord = async (req, res) => {
         const index = Math.floor(Math.random() * result.length);
         const token  = req.headers.authorization;
         res.header('Access-Control-Allow-Methods', 'GET, PATCH, PUT, POST, DELETE, OPTIONS');
-
+        
         let payload;
 
         payload = jwt.verify(token, process.env.JWT_ACCESS_SECRET, async (err, decoded) => {
@@ -75,16 +75,16 @@ module.exports.getRandomWord = async (req, res) => {
                                 res.status(404)
                             })
                         } else {
-                            // res.status(200).send({
-                            //     word: lastShowedWords[lastShowedWords.length - 2].word,
-                            //     translation: lastShowedWords[lastShowedWords.length - 2].translation,
-                            //     tokenRes: decoded
-                            //     })
-                            if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt < 1000 * 60 * 10){
-                                res.status(400).json({message: '1 hour has not yet expired', delay: lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt})
-                            } else {
-                                res.status(400).json({message: '1 hour has not yet expired'})
-                            }
+                            res.status(200).send({
+                                word: lastShowedWords[lastShowedWords.length - 2].word,
+                                translation: lastShowedWords[lastShowedWords.length - 2].translation,
+                                tokenRes: decoded
+                                })
+                            // if(lastShowedWords[lastShowedWords.length - 1].showedAt - lastShowedWords[lastShowedWords.length - 2].showedAt < 1000 * 2){
+                            //     res.status(400).json(lastShowedWords[lastShowedWords.length - 2])
+                            // } else {
+                            //     res.status(400).json(lastShowedWords[lastShowedWords.length - 2])
+                            // }
                         }
                 }
                   

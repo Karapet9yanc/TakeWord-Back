@@ -15,7 +15,7 @@ module.exports.createNewUser = async (req, res) => {
     if(userData.message){
       res.status(403).json(userData)
     } else {
-      res.json(userData)
+      res.status(200).json(userData)
     }
   } catch (e) {
     res.status(400).send({ message: e.message });
@@ -45,7 +45,12 @@ module.exports.auth = async (req, res) => {
     const { user } = req
     const token = await userService.auth(user)
     
-    res.status(200).json(token)
+    if(token){
+      res.status(200).json(token)
+    } else {
+      res.status(200).json({message: 'invalid token'})
+    }
+    
   } catch (e) {
     res.status(400).send({ message: e.message });
   }
