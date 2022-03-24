@@ -111,7 +111,7 @@ class UserService {
             }, 
             process.env.JWT_ACCESS_SECRET, 
             {
-                expiresIn: '7d'
+                expiresIn: 1000 * 60 * 60 * 24 * 7
             })
             return { token: token } 
         } else {
